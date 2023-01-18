@@ -1,5 +1,6 @@
 import { Formik, Form } from "formik";
 import { useState } from "react";
+import * as Yup from "yup";
 import Input from "./components/Input";
 import Button from "./components/Button";
 import Section from "./components/Section";
@@ -43,13 +44,29 @@ function App() {
             rate: "",
           }}
           onSubmit={handleSubmit}
+          validationSchema={Yup.object({
+            deposit: Yup.number()
+              .required("Obligatorio")
+              .typeError("Debe ser un número"),
+            contribution: Yup.number()
+              .required("Obligatorio")
+              .typeError("Debe ser un número"),
+            years: Yup.number()
+              .required("Obligatorio")
+              .typeError("Debe ser un número"),
+            rate: Yup.number()
+              .required("Obligatorio")
+              .typeError("Debe ser un número")
+              .min(0, "el valor mínimo es 0")
+              .max(1, "El valor máximo es 1"),
+          })}
         >
           <Form>
             <Input name="deposit" label="Depósito inicial"></Input>
             <Input name="contribution" label="Contribución anual"></Input>
             <Input name="years" label="Años"></Input>
             <Input name="rate" label="Interés estimado"></Input>
-            <Button>Calcular</Button>
+            <Button type="submit">Calcular</Button>
           </Form>
         </Formik>
         {balance !== "" ? <Balance>Balance final: {balance}</Balance> : null}
